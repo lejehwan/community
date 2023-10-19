@@ -1,8 +1,6 @@
 package project.community.entity;
 
-import lombok.AccessLevel;
-import lombok.Getter;
-import lombok.NoArgsConstructor;
+import lombok.*;
 import org.hibernate.annotations.ColumnDefault;
 
 import javax.persistence.*;
@@ -19,7 +17,9 @@ import static javax.persistence.GenerationType.IDENTITY;
  */
 @Entity
 @Getter
+@Builder
 @NoArgsConstructor(access = AccessLevel.PROTECTED)
+@AllArgsConstructor
 public class Reply extends BaseEntity{
 
     @Id
