@@ -20,6 +20,8 @@ public class Member extends BaseEntity{
     @Id @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long id;
 
+    private String username;
+
     @OneToMany(mappedBy = "member")
     private List<Board> boards = new ArrayList<>();
 
