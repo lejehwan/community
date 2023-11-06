@@ -42,9 +42,9 @@ public class Board extends BaseEntity{
     @ColumnDefault(value = "false")
     private boolean isDelete;// 삭제 여부
 
-//    @ManyToOne(fetch = FetchType.LAZY)
-//    @JoinColumn(name = "member_id")
-//    private Member member;
+    @ManyToOne(fetch = FetchType.LAZY)
+    @JoinColumn(name = "member_id")
+    private Member member;
 
     @OneToMany(mappedBy = "board")
     private List<Reply> replies = new ArrayList<>();

@@ -46,9 +46,9 @@ public class Reply extends BaseEntity{
     @OneToMany(mappedBy = "parent")
     private List<Reply> child = new ArrayList<>();
 
-//    @ManyToOne(fetch = FetchType.LAZY)
-//    @JoinColumn(name = "member_id")
-//    private Member member;
+    @ManyToOne(fetch = FetchType.LAZY)
+    @JoinColumn(name = "member_id")
+    private Member member;
 
     @ManyToOne(fetch = LAZY)
     @JoinColumn(name = "board_id")
