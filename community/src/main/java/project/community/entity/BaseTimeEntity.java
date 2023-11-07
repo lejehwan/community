@@ -23,16 +23,4 @@ public class BaseTimeEntity {
 
     @LastModifiedDate
     private LocalDateTime lastModifiedDate;// 수정 일시
-
-    @PrePersist
-    public void prePersist() {
-        LocalDateTime now = LocalDateTime.now();
-        createDate = now;
-        lastModifiedDate = now;
-    }
-
-    @PreUpdate
-    public void preUpdate() {
-        lastModifiedDate = LocalDateTime.now();
-    }
 }
