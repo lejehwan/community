@@ -2,9 +2,10 @@ package project.community.entity;
 
 import lombok.*;
 import org.hibernate.annotations.ColumnDefault;
-import project.community.dto.BoardDto;
+import org.hibernate.annotations.DynamicInsert;
 
 import javax.persistence.*;
+import java.time.LocalDateTime;
 import java.util.ArrayList;
 import java.util.List;
 
@@ -16,6 +17,7 @@ import static javax.persistence.GenerationType.*;
  */
 @Entity
 @Getter
+//@DynamicInsert
 @NoArgsConstructor(access = AccessLevel.PROTECTED)
 @AllArgsConstructor
 public class Board extends BaseEntity{
@@ -48,6 +50,14 @@ public class Board extends BaseEntity{
 
     @OneToMany(mappedBy = "board")
     private List<Reply> replies = new ArrayList<>();
+
+    @PrePersist
+    public void prePersist() {
+        viewCount = 0L;
+        thumbsUpCount = 0L;
+        thumbsDownCount = 0L;
+        isDelete = false;
+    }
 
     @Builder
     public Board(String title, String contents, Member member) {
