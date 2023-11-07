@@ -2,6 +2,7 @@ package project.community.entity;
 
 import lombok.*;
 import org.hibernate.annotations.ColumnDefault;
+import project.community.dto.BoardDto;
 
 import javax.persistence.*;
 import java.util.ArrayList;
@@ -15,7 +16,6 @@ import static javax.persistence.GenerationType.*;
  */
 @Entity
 @Getter
-@Builder
 @NoArgsConstructor(access = AccessLevel.PROTECTED)
 @AllArgsConstructor
 public class Board extends BaseEntity{
@@ -34,10 +34,10 @@ public class Board extends BaseEntity{
     private Long viewCount;// 조회 수
 
     @ColumnDefault(value = "0")
-    private String thumbsUpCount;// 좋아요
+    private Long thumbsUpCount;// 좋아요
 
     @ColumnDefault(value = "0")
-    private String thumbsDownCount;// 싫어요
+    private Long thumbsDownCount;// 싫어요
 
     @ColumnDefault(value = "false")
     private boolean isDelete;// 삭제 여부
@@ -48,4 +48,22 @@ public class Board extends BaseEntity{
 
     @OneToMany(mappedBy = "board")
     private List<Reply> replies = new ArrayList<>();
+
+    @Builder
+    public Board(String title, String contents, Member member) {
+        this.title = title;
+        this.contents = contents;
+        this.member = member;
+    }
+
+    public Board delete() {
+        this.isDelete = true;
+        return this;
+    }
+
+    public Board update() {
+        this.title = title;
+        this.contents = contents;
+        return this;
+    }
 }
