@@ -20,24 +20,24 @@ import java.util.List;
 @Builder
 @AllArgsConstructor
 @NoArgsConstructor
-public class BoardDto {
+public class BoardRespDto {
 
-    private Long id;// 번호
-    private String title;// 제목
-    private String contents;// 내용
-    private Long viewCount;// 조회 수
-    private Long thumbsUpCount;// 좋아요
-    private Long thumbsDownCount;// 싫어요
-    private boolean isDelete;// 삭제 여부
-    private String createBy;// 등록자
-    private String lastModifiedBy;// 수정자
-    private LocalDateTime createDate;// 등록 일시
-    private LocalDateTime lastModifiedDate;// 수정 일시
+    private Long id;
+    private String title;
+    private String contents;
+    private Long viewCount;
+    private Long thumbsUpCount;
+    private Long thumbsDownCount;
+    private boolean isDelete;
+    private String createBy;
+    private String lastModifiedBy;
+    private LocalDateTime createDate;
+    private LocalDateTime lastModifiedDate;
     private Member member;
     private List<Reply> replies = new ArrayList<>();
 
-    public BoardDto(Board board) {
-        BoardDto.builder()
+    public BoardRespDto(Board board) {
+        BoardRespDto.builder()
                 .id(board.getId())
                 .title(board.getTitle())
                 .contents(board.getContents())

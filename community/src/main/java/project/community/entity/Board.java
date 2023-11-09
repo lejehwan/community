@@ -2,10 +2,9 @@ package project.community.entity;
 
 import lombok.*;
 import org.hibernate.annotations.ColumnDefault;
-import org.hibernate.annotations.DynamicInsert;
+import project.community.dto.BoardReqDto;
 
 import javax.persistence.*;
-import java.time.LocalDateTime;
 import java.util.ArrayList;
 import java.util.List;
 
@@ -17,7 +16,6 @@ import static javax.persistence.GenerationType.*;
  */
 @Entity
 @Getter
-//@DynamicInsert
 @NoArgsConstructor(access = AccessLevel.PROTECTED)
 @AllArgsConstructor
 public class Board extends BaseEntity{
@@ -66,14 +64,18 @@ public class Board extends BaseEntity{
         this.member = member;
     }
 
-    public Board delete() {
+    public void delete() {
         this.isDelete = true;
-        return this;
     }
 
-    public Board update() {
-        this.title = title;
-        this.contents = contents;
-        return this;
+    public void update(BoardReqDto boardReqDto) {
+        this.title = boardReqDto.getTitle();
+        this.contents = boardReqDto.getContents();
+        this.viewCount = boardReqDto.getViewCount();
+        this.thumbsUpCount = boardReqDto.getThumbsUpCount();
+        this.thumbsDownCount = boardReqDto.getThumbsDownCount();
+        this.isDelete = boardReqDto.isDelete();
+        this.member = boardReqDto.getMember();
+        this.replies = boardReqDto.getReplies();
     }
 }
