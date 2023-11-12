@@ -15,6 +15,7 @@ import project.community.repository.BoardRepository;
  * @date 2023-11-07
  */
 @Service
+@Transactional
 @RequiredArgsConstructor
 public class BoardService {
 
@@ -25,6 +26,7 @@ public class BoardService {
         return new BoardRespDto(boardRepository.findById(id).orElseThrow(() -> new IllegalArgumentException("The board can't be found")));
     }
 
+    @Transactional(readOnly = true)
     public Page<BoardRespDto> findAll(Pageable pageable) {
         return boardRepository.findAll(pageable).map(BoardRespDto::new);
     }
