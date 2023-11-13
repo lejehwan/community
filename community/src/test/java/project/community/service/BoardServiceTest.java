@@ -67,8 +67,25 @@ class BoardServiceTest {
     }
 
     @Test
+    @DisplayName("게시글 등록 시, 제목이 없는 경우(null & \"\" & \" \")")
+    void checkTitleBySave() {
+        Member member = Member.builder().username("test user").build();
+        String title = null;
+        String contents = "test board contents 1";
+        Board board = Board.builder()
+                .title(title)
+                .contents(contents)
+                .member(member)
+                .build();
+        memberRepository.save(member);
+
+        assertThatThrownBy(() -> boardService.save(board))
+                .isInstanceOf(IllegalArgumentException.class)
+                .hasMessage("Title is required");
+    }
+
+    @Test
     @DisplayName("게시글 수정 시, 변경 확인")
-    @Rollback(value = false)
     void checkDefaultValue() throws InterruptedException {
         Member member = Member.builder().username("test user").build();
         String title = "test board title 1";
@@ -115,7 +132,7 @@ class BoardServiceTest {
 
     @Test
     @DisplayName("게시글 조회 시, 페이징 테스트")
-    void paging_test() {
+    void pagingTest() {
         Member member = Member.builder().username("test user").build();
         Board board1 = Board.builder()
                 .title("test board title 1")
@@ -152,10 +169,9 @@ class BoardServiceTest {
     void notExistsBoardId() {
         Long id = -1L;
 
-        assertThatThrownBy(() -> boardService.findById(id))
+        assertThatThrownBy(() -> boardService.findByIdToResp(id))
                 .isInstanceOf(IllegalArgumentException.class)
                 .hasMessage("The board can't be found");
     }
-
 
 }
