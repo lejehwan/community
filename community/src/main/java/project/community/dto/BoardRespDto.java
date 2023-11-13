@@ -35,22 +35,4 @@ public class BoardRespDto {
     private LocalDateTime lastModifiedDate;
     private Member member;
     private List<Reply> replies = new ArrayList<>();
-
-    public BoardRespDto(Board board) {
-        BoardRespDto.builder()
-                .id(board.getId())
-                .title(board.getTitle())
-                .contents(board.getContents())
-                .viewCount(board.getViewCount())
-                .thumbsUpCount(board.getThumbsUpCount())
-                .thumbsDownCount(board.getThumbsDownCount())
-                .isDelete(board.isDelete())
-                .createBy(board.getCreateBy())
-                .createDate(board.getCreateDate())
-                .lastModifiedBy(board.getLastModifiedBy())
-                .lastModifiedDate(board.getLastModifiedDate())
-                .member(board.getMember())
-                .replies(board.getReplies())
-                .build();
-    }
 }

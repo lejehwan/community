@@ -8,17 +8,16 @@ import org.springframework.data.domain.Page;
 import org.springframework.data.domain.PageRequest;
 import org.springframework.data.domain.Pageable;
 import org.springframework.data.domain.Sort;
-import org.springframework.test.annotation.Rollback;
 import org.springframework.transaction.annotation.Transactional;
 import project.community.dto.BoardReqDto;
 import project.community.dto.BoardRespDto;
 import project.community.entity.Board;
 import project.community.entity.Member;
+import project.community.mapper.BoardMapper;
 import project.community.repository.BoardRepository;
 import project.community.repository.MemberRepository;
 
 import java.time.LocalDateTime;
-import java.util.ArrayList;
 
 import static org.assertj.core.api.Assertions.assertThat;
 import static org.assertj.core.api.Assertions.assertThatThrownBy;
@@ -34,6 +33,7 @@ class BoardServiceTest {
     @Autowired BoardService boardService;
     @Autowired BoardRepository boardRepository;
     @Autowired MemberRepository memberRepository;
+    @Autowired BoardMapper boardMapper;
 
     @Test
     @DisplayName("게시글 등록 시, 저장 확인")
@@ -41,7 +41,7 @@ class BoardServiceTest {
         Member member = Member.builder().username("test user").build();
         String title = "test board title 1";
         String contents = "test board contents 1";
-        Board board = Board.builder()
+        BoardReqDto boardDto = BoardReqDto.builder()
                 .title(title)
                 .contents(contents)
                 .member(member)
@@ -50,9 +50,8 @@ class BoardServiceTest {
         memberRepository.save(member);
         LocalDateTime now = LocalDateTime.now();
         Thread.sleep(1000);
-        Board savedBoard = boardService.save(board);
+        Board savedBoard = boardService.save(boardDto);
 
-        assertThat(savedBoard).isEqualTo(board);
         assertThat(savedBoard.getTitle()).isEqualTo(title);
         assertThat(savedBoard.getContents()).isEqualTo(contents);
         assertThat(savedBoard.getMember()).isEqualTo(member);
@@ -72,14 +71,14 @@ class BoardServiceTest {
         Member member = Member.builder().username("test user").build();
         String title = null;
         String contents = "test board contents 1";
-        Board board = Board.builder()
+        BoardReqDto boardDto = BoardReqDto.builder()
                 .title(title)
                 .contents(contents)
                 .member(member)
                 .build();
         memberRepository.save(member);
 
-        assertThatThrownBy(() -> boardService.save(board))
+        assertThatThrownBy(() -> boardService.save(boardDto))
                 .isInstanceOf(IllegalArgumentException.class)
                 .hasMessage("Title is required");
     }
@@ -90,7 +89,7 @@ class BoardServiceTest {
         Member member = Member.builder().username("test user").build();
         String title = "test board title 1";
         String contents = "test board contents 1";
-        Board board = Board.builder()
+        BoardReqDto boardDto = BoardReqDto.builder()
                 .title(title)
                 .contents(contents)
                 .member(member)
@@ -99,7 +98,7 @@ class BoardServiceTest {
         memberRepository.save(member);
         LocalDateTime now = LocalDateTime.now();
         Thread.sleep(1000);
-        Board savedBoard = boardService.save(board);
+        Board savedBoard = boardService.save(boardDto);
         String updateTitle = "test update board title 1";
         String updateContents = "test update board contents 1";
         BoardReqDto boardReqDto = BoardReqDto.builder()
@@ -109,7 +108,6 @@ class BoardServiceTest {
                 .thumbsUpCount(2L)
                 .thumbsDownCount(0L)
                 .member(member)
-                .replies(new ArrayList<>())
                 .build();
         Thread.sleep(1000);
         Board updateBoard = boardService.updateById(savedBoard.getId(), boardReqDto);
@@ -127,24 +125,23 @@ class BoardServiceTest {
         assertThat(updateBoard.getThumbsUpCount()).isEqualTo(2L);
         assertThat(updateBoard.getThumbsDownCount()).isEqualTo(0L);
         assertThat(updateBoard.getMember()).isEqualTo(member);
-        assertThat(updateBoard.getReplies().size()).isEqualTo(0);
     }
 
     @Test
     @DisplayName("게시글 조회 시, 페이징 테스트")
     void pagingTest() {
         Member member = Member.builder().username("test user").build();
-        Board board1 = Board.builder()
+        BoardReqDto board1 = BoardReqDto.builder()
                 .title("test board title 1")
                 .contents("test board contents 1")
                 .member(member)
                 .build();
-        Board board2 = Board.builder()
+        BoardReqDto board2 = BoardReqDto.builder()
                 .title("test board title 2")
                 .contents("test board contents 2")
                 .member(member)
                 .build();
-        Board board3 = Board.builder()
+        BoardReqDto board3 = BoardReqDto.builder()
                 .title("test board title 3")
                 .contents("test board contents 3")
                 .member(member)
@@ -165,7 +162,7 @@ class BoardServiceTest {
     }
 
     @Test
-    @DisplayName("없는 게시글 조회에 대한 예외 처리")
+    @DisplayName("게시글 조회 시, 게시글이 없는 경우")
     void notExistsBoardId() {
         Long id = -1L;
 

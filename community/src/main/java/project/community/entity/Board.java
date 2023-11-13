@@ -18,6 +18,7 @@ import static javax.persistence.GenerationType.*;
 @Getter
 @NoArgsConstructor(access = AccessLevel.PROTECTED)
 @AllArgsConstructor
+@Builder
 public class Board extends BaseEntity{
 
     @Id @GeneratedValue(strategy = IDENTITY)
@@ -57,13 +58,6 @@ public class Board extends BaseEntity{
         isDelete = false;
     }
 
-    @Builder
-    public Board(String title, String contents, Member member) {
-        this.title = title;
-        this.contents = contents;
-        this.member = member;
-    }
-
     public void delete() {
         this.isDelete = true;
     }
@@ -76,6 +70,5 @@ public class Board extends BaseEntity{
         this.thumbsDownCount = boardReqDto.getThumbsDownCount();
         this.isDelete = boardReqDto.isDelete();
         this.member = boardReqDto.getMember();
-        this.replies = boardReqDto.getReplies();
     }
 }

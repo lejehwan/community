@@ -27,5 +27,4 @@ public class BoardReqDto {
     private Long thumbsDownCount;
     private boolean isDelete;
     private Member member;
-    private List<Reply> replies = new ArrayList<>();
 }
