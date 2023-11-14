@@ -8,6 +8,7 @@ import org.springframework.data.domain.Page;
 import org.springframework.data.domain.PageRequest;
 import org.springframework.data.domain.Pageable;
 import org.springframework.data.domain.Sort;
+import org.springframework.test.annotation.Rollback;
 import org.springframework.transaction.annotation.Transactional;
 import project.community.dto.BoardReqDto;
 import project.community.dto.BoardRespDto;
@@ -37,6 +38,7 @@ class BoardServiceTest {
 
     @Test
     @DisplayName("게시글 등록 시, 저장 확인")
+    @Rollback(value = false)
     void checkDefaultValueBySave() throws InterruptedException {
         Member member = Member.builder().username("test user").build();
         String title = "test board title 1";
@@ -46,10 +48,10 @@ class BoardServiceTest {
                 .contents(contents)
                 .member(member)
                 .build();
-
         memberRepository.save(member);
         LocalDateTime now = LocalDateTime.now();
         Thread.sleep(1000);
+
         Board savedBoard = boardService.save(boardDto);
 
         assertThat(savedBoard.getTitle()).isEqualTo(title);
@@ -66,7 +68,7 @@ class BoardServiceTest {
     }
 
     @Test
-    @DisplayName("게시글 등록 시, 제목이 없는 경우(null & \"\" & \" \")")
+    @DisplayName("제목이 없는 게시글을 등록하는 경우 예외 처리 - (null & \"\" & \" \")")
     void checkTitleBySave() {
         Member member = Member.builder().username("test user").build();
         String title = null;
@@ -84,47 +86,13 @@ class BoardServiceTest {
     }
 
     @Test
-    @DisplayName("게시글 수정 시, 변경 확인")
-    void checkDefaultValue() throws InterruptedException {
-        Member member = Member.builder().username("test user").build();
-        String title = "test board title 1";
-        String contents = "test board contents 1";
-        BoardReqDto boardDto = BoardReqDto.builder()
-                .title(title)
-                .contents(contents)
-                .member(member)
-                .build();
+    @DisplayName("존재하지 않는 게시글을 조회하는 경우 예외처리")
+    void notExistsBoardId() {
+        Long id = -1L;
 
-        memberRepository.save(member);
-        LocalDateTime now = LocalDateTime.now();
-        Thread.sleep(1000);
-        Board savedBoard = boardService.save(boardDto);
-        String updateTitle = "test update board title 1";
-        String updateContents = "test update board contents 1";
-        BoardReqDto boardReqDto = BoardReqDto.builder()
-                .title(updateTitle)
-                .contents(updateContents)
-                .viewCount(3L)
-                .thumbsUpCount(2L)
-                .thumbsDownCount(0L)
-                .member(member)
-                .build();
-        Thread.sleep(1000);
-        Board updateBoard = boardService.updateById(savedBoard.getId(), boardReqDto);
-
-        assertThat(updateBoard).isEqualTo(savedBoard);
-        assertThat(updateBoard.getTitle()).isEqualTo(savedBoard.getTitle());
-        assertThat(updateBoard.getContents()).isEqualTo(savedBoard.getContents());
-        assertThat(updateBoard.getCreateDate()).isAfter(now);
-        assertThat(updateBoard.getLastModifiedDate()).isAfter(now);
-
-        boardRepository.flush(); // 수정시간과 생성 시간 확인을 위한 DB와 동기화 작업
-        assertThat(updateBoard.getLastModifiedDate()).isAfter(updateBoard.getCreateDate());
-
-        assertThat(updateBoard.getViewCount()).isEqualTo(3L);
-        assertThat(updateBoard.getThumbsUpCount()).isEqualTo(2L);
-        assertThat(updateBoard.getThumbsDownCount()).isEqualTo(0L);
-        assertThat(updateBoard.getMember()).isEqualTo(member);
+        assertThatThrownBy(() -> boardService.findByIdToResp(id))
+                .isInstanceOf(IllegalArgumentException.class)
+                .hasMessage("The board can't be found");
     }
 
     @Test
@@ -147,12 +115,11 @@ class BoardServiceTest {
                 .member(member)
                 .build();
         Pageable pageable = PageRequest.of(0,2, Sort.Direction.DESC, "id");
-
         boardService.save(board1);
         boardService.save(board2);
         boardService.save(board3);
-
         memberRepository.save(member);
+
         Page<BoardRespDto> boardList = boardService.findAll(pageable);
 
         assertThat(boardList.getNumber()).isEqualTo(0);
@@ -162,13 +129,115 @@ class BoardServiceTest {
     }
 
     @Test
-    @DisplayName("게시글 조회 시, 게시글이 없는 경우")
-    void notExistsBoardId() {
-        Long id = -1L;
+    @DisplayName("게시글 수정 시, 변경 확인")
+    void checkDefaultValue() throws InterruptedException {
+        Member member = Member.builder().username("test user").build();
+        String title = "test board title 1";
+        String contents = "test board contents 1";
+        BoardReqDto boardDto = BoardReqDto.builder()
+                .title(title)
+                .contents(contents)
+                .member(member)
+                .build();
+        memberRepository.save(member);
+        LocalDateTime now = LocalDateTime.now();
+        Thread.sleep(1000);
+        Board savedBoard = boardService.save(boardDto);
+        String updateTitle = "test update board title 1";
+        String updateContents = "test update board contents 1";
+        BoardReqDto boardReqDto = BoardReqDto.builder()
+                .title(updateTitle)
+                .contents(updateContents)
+                .viewCount(3L)
+                .thumbsUpCount(2L)
+                .thumbsDownCount(0L)
+                .member(member)
+                .build();
+        Thread.sleep(1000);
 
-        assertThatThrownBy(() -> boardService.findByIdToResp(id))
+        Board updateBoard = boardService.updateById(savedBoard.getId(), boardReqDto);
+
+        assertThat(updateBoard).isEqualTo(savedBoard);
+        assertThat(updateBoard.getTitle()).isEqualTo(savedBoard.getTitle());
+        assertThat(updateBoard.getContents()).isEqualTo(savedBoard.getContents());
+        assertThat(updateBoard.getCreateDate()).isAfter(now);
+        assertThat(updateBoard.getLastModifiedDate()).isAfter(now);
+        boardRepository.flush(); // 수정시간과 생성 시간 확인을 위한 DB와 동기화 작업
+        assertThat(updateBoard.getLastModifiedDate()).isAfter(updateBoard.getCreateDate());
+        assertThat(updateBoard.getViewCount()).isEqualTo(3L);
+        assertThat(updateBoard.getThumbsUpCount()).isEqualTo(2L);
+        assertThat(updateBoard.getThumbsDownCount()).isEqualTo(0L);
+        assertThat(updateBoard.getMember()).isEqualTo(member);
+    }
+
+    @Test
+    @DisplayName("제목이 없는 게시글을 수정하는 경우 예외 처리 - (null & \"\" & \" \")")
+    void checkTitleByUpdate() {
+        Member member = Member.builder().username("test user").build();
+        String title = "test board title 1";
+        String contents = "test board contents 1";
+        BoardReqDto boardDto = BoardReqDto.builder()
+                .title(title)
+                .contents(contents)
+                .member(member)
+                .build();
+        memberRepository.save(member);
+        Board savedBoard = boardService.save(boardDto);
+        String updateTitle = null;
+        BoardReqDto boardReqDto = BoardReqDto.builder()
+                .title(updateTitle)
+                .contents("")
+                .viewCount(3L)
+                .thumbsUpCount(2L)
+                .thumbsDownCount(0L)
+                .member(member)
+                .build();
+
+        assertThatThrownBy(() -> boardService.updateById(savedBoard.getId(), boardReqDto))
+                .isInstanceOf(IllegalArgumentException.class)
+                .hasMessage("Title is required");
+    }
+
+    @Test
+    @DisplayName("아이디가 없는 게시글을 수정하는 경우 예외처리")
+    void checkIdByUpdate() {
+        Member member = Member.builder().username("test user").build();
+        String updateTitle = "test update board title 1";
+        String updateContents = "test update board contents 1";
+        BoardReqDto boardReqDto = BoardReqDto.builder()
+                .title(updateTitle)
+                .contents(updateContents)
+                .viewCount(3L)
+                .thumbsUpCount(2L)
+                .thumbsDownCount(0L)
+                .member(member)
+                .build();
+
+        assertThatThrownBy(() -> boardService.updateById(-1L, boardReqDto))
                 .isInstanceOf(IllegalArgumentException.class)
                 .hasMessage("The board can't be found");
     }
+
+    @Test
+    @DisplayName("게시글 삭제 시, 삭제 확인")
+    void checkDeleteById() {
+        Member member = Member.builder().username("test user").build();
+        String title = "test board title 1";
+        String contents = "test board contents 1";
+        BoardReqDto boardDto = BoardReqDto.builder()
+                .title(title)
+                .contents(contents)
+                .member(member)
+                .build();
+        memberRepository.save(member);
+        Board savedBoard = boardService.save(boardDto);
+
+        boardService.deleteById(savedBoard.getId());
+        Board deletedBoard = boardService.findById(savedBoard.getId());
+
+        assertThat(deletedBoard).isEqualTo(savedBoard);
+        assertThat(deletedBoard.isDelete()).isTrue();
+    }
+
 
 }

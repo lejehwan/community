@@ -24,6 +24,13 @@ public class BoardService {
     private final BoardRepository boardRepository;
     private final BoardMapper boardMapper;
 
+    public Board save(BoardReqDto boardDto) {
+        if (StringUtils.isBlank(boardDto.getTitle())) {
+            throw new IllegalArgumentException("Title is required");
+        }
+        return boardRepository.save(boardMapper.toEntity(boardDto));
+    }
+
     @Transactional(readOnly = true)
     public Board findById(Long id) {
         return boardRepository.findById(id).orElseThrow(() -> new IllegalArgumentException("The board can't be found"));
@@ -34,19 +41,19 @@ public class BoardService {
         return boardRepository.findAll(pageable).map(boardMapper::fromEntity);
     }
 
-    public Board save(BoardReqDto boardDto) {
-        if (StringUtils.isBlank(boardDto.getTitle())) {
+    public Board updateById(Long id, BoardReqDto boardReqDto) {
+        if (StringUtils.isBlank(boardReqDto.getTitle())) {
             throw new IllegalArgumentException("Title is required");
         }
-        return boardRepository.save(boardMapper.toEntity(boardDto));
+        Board findBoard = findById(id);
+        findBoard.update(boardReqDto);
+        return boardRepository.save(findBoard);
     }
 
-    public Board updateById(Long id, BoardReqDto boardReqDto) {
-        Board board = findById(id);
-        board.update(boardReqDto);
-        return boardRepository.save(board);
+    public void deleteById(Long id) {
+        Board findBoard = findById(id);
+        findBoard.delete();
     }
-
 
     /**
      * 게시글 아이디로 조회한 데이터를 응답 데이터로 감싸 리턴
