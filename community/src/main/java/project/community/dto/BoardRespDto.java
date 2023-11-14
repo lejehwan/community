@@ -29,6 +29,7 @@ public class BoardRespDto {
     private Long thumbsUpCount;
     private Long thumbsDownCount;
     private boolean isDelete;
+    private LocalDateTime deleteDate;
     private String createBy;
     private String lastModifiedBy;
     private LocalDateTime createDate;

@@ -7,6 +7,7 @@ import lombok.NoArgsConstructor;
 import project.community.entity.Member;
 import project.community.entity.Reply;
 
+import java.time.LocalDateTime;
 import java.util.ArrayList;
 import java.util.List;
 
@@ -26,5 +27,6 @@ public class BoardReqDto {
     private Long thumbsUpCount;
     private Long thumbsDownCount;
     private boolean isDelete;
+    private LocalDateTime deleteDate;
     private Member member;
 }

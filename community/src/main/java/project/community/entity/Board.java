@@ -5,6 +5,7 @@ import org.hibernate.annotations.ColumnDefault;
 import project.community.dto.BoardReqDto;
 
 import javax.persistence.*;
+import java.time.LocalDateTime;
 import java.util.ArrayList;
 import java.util.List;
 
@@ -43,6 +44,8 @@ public class Board extends BaseEntity{
     @ColumnDefault(value = "false")
     private boolean isDelete;// 삭제 여부
 
+    private LocalDateTime deleteDate;// 삭제 일시
+
     @ManyToOne(fetch = FetchType.LAZY)
     @JoinColumn(name = "member_id")
     private Member member;
@@ -56,10 +59,12 @@ public class Board extends BaseEntity{
         thumbsUpCount = 0L;
         thumbsDownCount = 0L;
         isDelete = false;
+        deleteDate = null;
     }
 
     public void delete() {
         this.isDelete = true;
+        this.deleteDate = LocalDateTime.now();
     }
 
     public void update(BoardReqDto boardReqDto) {
@@ -68,7 +73,6 @@ public class Board extends BaseEntity{
         this.viewCount = boardReqDto.getViewCount();
         this.thumbsUpCount = boardReqDto.getThumbsUpCount();
         this.thumbsDownCount = boardReqDto.getThumbsDownCount();
-        this.isDelete = boardReqDto.isDelete();
         this.member = boardReqDto.getMember();
     }
 }
