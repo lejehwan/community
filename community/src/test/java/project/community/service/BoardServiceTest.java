@@ -112,6 +112,19 @@ class BoardServiceTest {
     }
 
     @Test
+    @DisplayName("게시글 조회 시, 조회수 증가")
+    void increaseViewCountTest() {
+        String title = "test board title 1";
+        String contents = "test board contents 1";
+        BoardReqDto boardDto = setUpBoardReqDtoBuild(title, contents);
+        Board savedBoard = boardService.save(boardDto);
+
+        Board findBoard = boardService.findById(savedBoard.getId());
+
+        assertThat(findBoard.getViewCount()).isEqualTo(1);
+    }
+
+    @Test
     @DisplayName("게시글 조회 시, 페이징 테스트")
     void pagingTest() {
         String title1 = "test board title 1";

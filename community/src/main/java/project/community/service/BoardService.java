@@ -33,7 +33,9 @@ public class BoardService {
 
     @Transactional(readOnly = true)
     public Board findById(Long id) {
-        return boardRepository.findById(id).orElseThrow(() -> new IllegalArgumentException("The board can't be found"));
+        Board board = boardRepository.findById(id).orElseThrow(() -> new IllegalArgumentException("The board can't be found"));
+        board.increaseViewCount();
+        return board;
     }
 
     @Transactional(readOnly = true)

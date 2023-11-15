@@ -62,11 +62,31 @@ public class Board extends BaseEntity{
         deleteDate = null;
     }
 
+    /**
+     * 조회 수 증가 메소드
+     * @date 2023-11-15
+     * @author jeonghwanlee
+     */
+    public void increaseViewCount() {
+        this.viewCount ++;
+    }
+
+    /**
+     * 게시글 삭제 메소드
+     * @date 2023-11-15
+     * @author jeonghwanlee
+     */
     public void delete() {
         this.isDelete = true;
         this.deleteDate = LocalDateTime.now();
     }
 
+    /**
+     * 게시글 수정 메소드
+     * @date 2023-11-15
+     * @author jeonghwanlee
+     * @param boardReqDto
+     */
     public void update(BoardReqDto boardReqDto) {
         this.title = boardReqDto.getTitle();
         this.contents = boardReqDto.getContents();
