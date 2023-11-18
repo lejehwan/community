@@ -1,7 +1,7 @@
-package project.community.repository;
+package project.community.repository.reply;
 
 import org.springframework.data.jpa.repository.JpaRepository;
-import project.community.entity.Reply;
+import project.community.entity.reply.Reply;
 
 /**
  * @author jeonghwanlee

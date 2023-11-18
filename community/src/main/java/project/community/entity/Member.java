@@ -3,6 +3,7 @@ package project.community.entity;
 import lombok.*;
 import project.community.entity.board.Board;
 import project.community.entity.common.BaseEntity;
+import project.community.entity.reply.Reply;
 
 import javax.persistence.*;
 import java.util.ArrayList;
