@@ -1,4 +1,4 @@
-package project.community.dto;
+package project.community.dto.board;
 
 import lombok.AllArgsConstructor;
 import lombok.Builder;

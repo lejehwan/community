@@ -1,10 +1,9 @@
-package project.community.dto;
+package project.community.dto.board;
 
 import lombok.AllArgsConstructor;
 import lombok.Builder;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
-import project.community.entity.Board;
 import project.community.entity.Member;
 import project.community.entity.Reply;
 

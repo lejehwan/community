@@ -1,9 +1,9 @@
-package project.community.mapper;
+package project.community.mapper.board;
 
 import org.mapstruct.Mapper;
-import project.community.dto.BoardReqDto;
-import project.community.dto.BoardRespDto;
-import project.community.entity.Board;
+import project.community.dto.board.BoardReqDto;
+import project.community.dto.board.BoardRespDto;
+import project.community.entity.board.Board;
 
 /**
  * MapStruct 의 구현체 custom version

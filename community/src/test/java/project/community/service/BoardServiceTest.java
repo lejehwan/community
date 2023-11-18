@@ -8,15 +8,15 @@ import org.springframework.data.domain.Page;
 import org.springframework.data.domain.PageRequest;
 import org.springframework.data.domain.Pageable;
 import org.springframework.data.domain.Sort;
-import org.springframework.test.annotation.Rollback;
 import org.springframework.transaction.annotation.Transactional;
-import project.community.dto.BoardReqDto;
-import project.community.dto.BoardRespDto;
-import project.community.entity.Board;
+import project.community.dto.board.BoardReqDto;
+import project.community.dto.board.BoardRespDto;
+import project.community.entity.board.Board;
 import project.community.entity.Member;
-import project.community.mapper.BoardMapper;
+import project.community.mapper.board.BoardMapper;
 import project.community.repository.BoardRepository;
 import project.community.repository.MemberRepository;
+import project.community.service.board.BoardService;
 
 import java.time.LocalDateTime;
 

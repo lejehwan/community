@@ -1,6 +1,8 @@
 package project.community.entity;
 
 import lombok.*;
+import project.community.entity.board.Board;
+import project.community.entity.common.BaseEntity;
 
 import javax.persistence.*;
 import java.util.ArrayList;
@@ -15,7 +17,7 @@ import java.util.List;
 @Builder
 @NoArgsConstructor(access = AccessLevel.PROTECTED)
 @AllArgsConstructor
-public class Member extends BaseEntity{
+public class Member extends BaseEntity {
 
     @Id @GeneratedValue(strategy = GenerationType.IDENTITY)
     @Column(name = "member_id")

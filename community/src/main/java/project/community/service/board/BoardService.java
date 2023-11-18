@@ -1,4 +1,4 @@
-package project.community.service;
+package project.community.service.board;
 
 import lombok.RequiredArgsConstructor;
 import org.apache.commons.lang3.StringUtils;
@@ -6,10 +6,10 @@ import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
-import project.community.dto.BoardReqDto;
-import project.community.dto.BoardRespDto;
-import project.community.entity.Board;
-import project.community.mapper.BoardMapper;
+import project.community.dto.board.BoardReqDto;
+import project.community.dto.board.BoardRespDto;
+import project.community.entity.board.Board;
+import project.community.mapper.board.BoardMapper;
 import project.community.repository.BoardRepository;
 
 /**

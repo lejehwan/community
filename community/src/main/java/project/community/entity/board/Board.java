@@ -1,8 +1,11 @@
-package project.community.entity;
+package project.community.entity.board;
 
 import lombok.*;
 import org.hibernate.annotations.ColumnDefault;
-import project.community.dto.BoardReqDto;
+import project.community.dto.board.BoardReqDto;
+import project.community.entity.common.BaseEntity;
+import project.community.entity.Member;
+import project.community.entity.Reply;
 
 import javax.persistence.*;
 import java.time.LocalDateTime;
@@ -20,7 +23,7 @@ import static javax.persistence.GenerationType.*;
 @NoArgsConstructor(access = AccessLevel.PROTECTED)
 @AllArgsConstructor
 @Builder
-public class Board extends BaseEntity{
+public class Board extends BaseEntity {
 
     @Id @GeneratedValue(strategy = IDENTITY)
     @Column(name = "borad_id")

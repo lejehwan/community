@@ -2,6 +2,8 @@ package project.community.entity;
 
 import lombok.*;
 import org.hibernate.annotations.ColumnDefault;
+import project.community.entity.board.Board;
+import project.community.entity.common.BaseEntity;
 
 import javax.persistence.*;
 
@@ -20,7 +22,7 @@ import static javax.persistence.GenerationType.IDENTITY;
 @Builder
 @NoArgsConstructor(access = AccessLevel.PROTECTED)
 @AllArgsConstructor
-public class Reply extends BaseEntity{
+public class Reply extends BaseEntity {
 
     @Id
     @GeneratedValue(strategy = IDENTITY)
