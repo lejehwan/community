@@ -49,7 +49,7 @@ public class BoardService {
         }
         Board findBoard = findById(id);
         findBoard.update(boardReqDto);
-        return boardRepository.save(findBoard);
+        return findBoard;
     }
 
     public void deleteById(Long id) {
