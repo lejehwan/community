@@ -1,4 +1,4 @@
-package project.community.service;
+package project.community.service.board;
 
 import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Test;
@@ -8,16 +8,14 @@ import org.springframework.data.domain.Page;
 import org.springframework.data.domain.PageRequest;
 import org.springframework.data.domain.Pageable;
 import org.springframework.data.domain.Sort;
-import org.springframework.test.annotation.Rollback;
 import org.springframework.transaction.annotation.Transactional;
 import project.community.dto.board.BoardReqDto;
 import project.community.dto.board.BoardRespDto;
 import project.community.entity.board.Board;
 import project.community.entity.Member;
 import project.community.mapper.board.BoardMapper;
-import project.community.repository.BoardRepository;
+import project.community.repository.board.BoardRepository;
 import project.community.repository.MemberRepository;
-import project.community.service.board.BoardService;
 
 import java.time.LocalDateTime;
 
@@ -107,7 +105,7 @@ class BoardServiceTest {
     void notExistsBoardId() {
         Long id = -1L;
 
-        assertThatThrownBy(() -> boardService.findByIdToResp(id))
+        assertThatThrownBy(() -> boardService.findById(id))
                 .isInstanceOf(IllegalArgumentException.class)
                 .hasMessage("The board can't be found");
     }

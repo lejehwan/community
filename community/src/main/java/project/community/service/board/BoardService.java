@@ -10,7 +10,7 @@ import project.community.dto.board.BoardReqDto;
 import project.community.dto.board.BoardRespDto;
 import project.community.entity.board.Board;
 import project.community.mapper.board.BoardMapper;
-import project.community.repository.BoardRepository;
+import project.community.repository.board.BoardRepository;
 
 /**
  * @author jeonghwanlee
@@ -57,14 +57,4 @@ public class BoardService {
         findBoard.delete();
     }
 
-    /**
-     * 게시글 아이디로 조회한 데이터를 응답 데이터로 감싸 리턴
-     * @date 2023-11-13
-     * @author jeonghwanlee
-     * @param id 게시글 아이디
-     * @return 게시글 응답 데이터
-     */
-    public BoardRespDto findByIdToResp(Long id) {
-        return boardMapper.fromEntity(findById(id));
-    }
 }

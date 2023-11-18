@@ -1,4 +1,4 @@
-package project.community.repository;
+package project.community.repository.board;
 
 import org.springframework.data.jpa.repository.JpaRepository;
 import project.community.entity.board.Board;

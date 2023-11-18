@@ -7,6 +7,7 @@ import org.springframework.boot.test.context.SpringBootTest;
 import org.springframework.test.annotation.Rollback;
 import org.springframework.transaction.annotation.Transactional;
 import project.community.entity.board.Board;
+import project.community.repository.board.BoardRepository;
 
 import static org.assertj.core.api.Assertions.assertThat;
 
@@ -20,7 +21,8 @@ import static org.assertj.core.api.Assertions.assertThat;
 @Rollback(value = false)
 class BoardRepositoryTest {
 
-    @Autowired BoardRepository boardRepository;
+    @Autowired
+    BoardRepository boardRepository;
 
     @Test
     @DisplayName("게시판 기본적인 CRUD 테스트")

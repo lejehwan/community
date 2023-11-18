@@ -5,7 +5,7 @@ import lombok.Builder;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
 import project.community.entity.Member;
-import project.community.entity.Reply;
+import project.community.entity.reply.Reply;
 
 import java.time.LocalDateTime;
 import java.util.ArrayList;

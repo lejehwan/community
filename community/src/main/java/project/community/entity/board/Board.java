@@ -5,7 +5,7 @@ import org.hibernate.annotations.ColumnDefault;
 import project.community.dto.board.BoardReqDto;
 import project.community.entity.common.BaseEntity;
 import project.community.entity.Member;
-import project.community.entity.Reply;
+import project.community.entity.reply.Reply;
 
 import javax.persistence.*;
 import java.time.LocalDateTime;
